@@ -31,8 +31,8 @@ connect.connect(function(err){
 });
 //获取user
 app.get('/api/userlist', (req, res) => {
-    const sql = `select * from websites limit ${req.query.skip * req.query.limit}, ${req.query.skip * req.query.limit + req.query.limit}`;
-    const sqlcount = `select count(*) from websites`;
+    const sql = `select * from users limit ${req.query.skip * req.query.limit}, ${req.query.skip * req.query.limit + req.query.limit}`;
+    const sqlcount = `select count(*) from users`;
     connect.query(sql, (err, result) => {
         if (err) throw err;
         connect.query(sqlcount, (err, count) => {
@@ -47,7 +47,7 @@ app.get('/api/userlist', (req, res) => {
 })
 //添加user
 app.post('/api/adduser', (req, res) => {
-    var  addSql = 'INSERT INTO websites(Id,name,url,alexa,country) VALUES(0,?,?,?,?)';
+    var  addSql = 'INSERT INTO users(Id,name,url,alexa,country) VALUES(0,?,?,?,?)';
     var  addSqlParams = [req.body.name, req.body.url,'23453', req.body.country];
     connect.query(addSql, addSqlParams, function(err,result){
         if(err){
@@ -58,7 +58,7 @@ app.post('/api/adduser', (req, res) => {
 })
 //删除user
 app.delete('/api/deluser', (req, res) => {
-    var delSql = `DELETE FROM websites where id=${req.body.id}`;
+    var delSql = `DELETE FROM users where id=${req.body.id}`;
     connect.query(delSql,function (err, result) {
         if(err){
             return;
@@ -69,7 +69,7 @@ app.delete('/api/deluser', (req, res) => {
 })
 //修改user
 app.put('/api/putuser', (req, res) => {
-    var delSql = `update websites set name='${req.body.name}',url='${req.body.url}',country='${req.body.country}' where id=${req.body.id}`;
+    var delSql = `update users set name='${req.body.name}',url='${req.body.url}',country='${req.body.country}' where id=${req.body.id}`;
     console.log(delSql)
     connect.query(delSql,function (err, result) {
         if(err){
@@ -83,10 +83,11 @@ app.put('/api/putuser', (req, res) => {
 //判断是否登录成功
 app.post('/api/login', (req, res) => {
     console.log('delSql444')
-
     var delSql = `select * from users where name='${req.body.name}' and password='${req.body.password}'`;
+    console.log(delSql)
     connect.query(delSql,function (err, result) {
         if(err){
+            console.log(err)
             return;
         } else {
             console.log(result.length)
